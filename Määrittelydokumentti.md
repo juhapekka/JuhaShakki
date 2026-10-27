@@ -1,6 +1,6 @@
 # JuhaShakki – määrittelydokumentti
 
-Eli projektin tarkoituksena on toteuttaa shakki peli mikä toimii webbi sivuna missä tahansa selaimessa.
+Projektin tarkoituksena on toteuttaa shakkipeli mikä toimii verkkosivuna tavallisessa selaimessa.
 ## Perustiedot
 - Toteutusympäristönä on selain ja node.js kehitys- ja rakennustyökaluina
 - Ohjelmointikieli: JavaScript
