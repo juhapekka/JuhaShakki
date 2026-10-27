@@ -1,0 +1,2 @@
+# JuhaShakki
+Algoritmit ja tekoäly
