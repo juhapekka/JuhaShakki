@@ -1,6 +1,7 @@
 # JuhaShakki
 Algoritmit ja tekoäly
 
+Live versio projektin kehityksestä nähtävissä täällä https://juhapekka.github.io/public/
 
 ## Kehitysympäristön asennus
 
