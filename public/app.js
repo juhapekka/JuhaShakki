@@ -1,10 +1,3 @@
-//alert("Hello world!");
-
-/*
-    <h2>♙♘♗♖♕♔</h2>
-    <h2>♟♞♝♜♛♚</h2>
-*/
-
 const boardElement = document.querySelector('#board');
 
 //lauta
@@ -36,6 +29,14 @@ const PIECE_NAMES = Object.freeze({
   k: 'Kuningas'
 });
 
+function column(square) {
+  return square & 7;
+}
+
+function row(square) {
+  return square >> 3;
+}
+
 function createInitialBoard() {
   return [
     'R', 'N', 'B', 'Q', 'K', 'B', 'N', 'R',
@@ -59,7 +60,7 @@ function getSquareDisplayOrder() {
 }
 
 function squareName(square) {
-  return String.fromCharCode(97 + (square & 7)) + ((square >> 3) + 1);
+  return String.fromCharCode(97 + column(square)) + (row(square) + 1);
 }
 
 function getPieceColor(piece) {
@@ -81,7 +82,7 @@ function getPieceGlyph(piece) {
 function createSquareButton(square) {
   const piece = board[square];
   const colorName = getPieceColor(piece);
-  const isLightSquare = ((square & 7) + (square >> 3)) % 2 === 0;
+  const isLightSquare = (column(square) + row(square)) % 2 === 0;
 
   const button = document.createElement('button');
   button.className = [
