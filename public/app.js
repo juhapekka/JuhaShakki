@@ -104,7 +104,7 @@ function addMoveIfAvailable(position, moves, from, to) {
   const movingColor = getPieceColor(position[from]);
   const targetColor = getPieceColor(position[to]);
   
-  if (targetColor !== movingColor)
+  if (targetColor != movingColor)
     moves.push({ from, to });
 }
 
@@ -194,6 +194,33 @@ function addKingMoves(position, moves, from) {
   }
 }
 
+function addSlidingMoves(position, moves, from, directions) {
+  const movingColor = getPieceColor(position[from]);
+  const startCol = column(from);
+  const startRow = row(from);
+
+  for (const [colDirection, rowDirection] of directions) {
+    let nextCol = startCol + colDirection;
+    let nextRow = startRow + rowDirection;
+
+    while (isOnBoard(nextCol, nextRow)) {
+      const to = squareIndex(nextCol, nextRow);
+      const targetColor = getPieceColor(position[to]);
+      
+      if (targetColor == movingColor)
+        break;
+
+      moves.push({ from, to });
+
+      if (position[to])
+        break;
+
+      nextCol += colDirection;
+      nextRow += rowDirection;
+    }
+  }
+}
+
 function generateMoves(position, from, attackOnly = false) {
   const piece = position[from];
 
@@ -209,6 +236,12 @@ function generateMoves(position, from, attackOnly = false) {
     addKnightMoves(position, moves, from);
   else if (pieceType == 'k')
     addKingMoves(position, moves, from);
+  else if (pieceType == 'b')
+    addSlidingMoves(position, moves, from, [[1, 1], [1, -1], [-1, 1], [-1, -1]]);
+  else if (pieceType == 'r')
+    addSlidingMoves(position, moves, from, [[1, 0], [-1, 0], [0, 1], [0, -1]]);
+  else if (pieceType == 'q')
+    addSlidingMoves(position, moves, from, [[1, 1], [1, -1], [-1, 1], [-1, -1], [1, 0], [-1, 0], [0, 1], [0, -1]]);
 
   // Matti tunnistetaan jos kuningasta vastaan hyökätään ja kuninkaalla
   // ei ole laillisia siirtoja
