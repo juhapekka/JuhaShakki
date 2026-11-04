@@ -50,3 +50,16 @@ main {
 .dark {
     background: #936342;
 }
+
+button, select {
+    font: inherit;
+    border: 1px solid #cf9b58;
+    border-radius: 5px;
+    padding: 9px 13px;
+    background: #20352e;
+    color: #f1ecdc;
+}
+
+button:hover {
+    background: #2e4a3e;
+}

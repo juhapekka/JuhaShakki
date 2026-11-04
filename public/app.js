@@ -2,6 +2,7 @@ const boardElement = document.querySelector('#board');
 
 //lauta
 let board;
+let selectedSquare = null;
 
 // Laudalla on shakkikoodit ('P', 'n, jne) Tehdään taulut missä
 // on koko nimet mitkä yhdistää shakkikoodit näkyviin merkkeihin
@@ -83,16 +84,23 @@ function createSquareButton(square) {
   const piece = board[square];
   const colorName = getPieceColor(piece);
   const isLightSquare = (column(square) + row(square)) % 2 === 0;
+  const isSelected = selectedSquare === square;
 
   const button = document.createElement('button');
   button.className = [
     'square',
     isLightSquare ? 'light' : 'dark',
+    isSelected ? 'selected' : '',
     piece ? 'piece' : '',
     piece ? `${colorName}-nappula` : ''
   ].filter(Boolean).join(' ');
   button.textContent = getPieceGlyph(piece);
+  button.onclick = () => handleSquareClick(square);
   return button;
+}
+
+function handleSquareClick(square) {
+  selectedSquare = square;
 }
 
 function renderBoard() {
