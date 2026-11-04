@@ -80,11 +80,20 @@ function getPieceGlyph(piece) {
   return PIECE_GLYPHS[`${colorName}${pieceName}`];
 }
 
+function isWhiteTargetSquare(square) {
+  if (selectedSquare === null)
+    return false;
+
+  return getLegalMoves(board, 'valkoinen').some(move => move.from === selectedSquare && move.to === square);
+}
+
+
 function createSquareButton(square) {
   const piece = board[square];
   const colorName = getPieceColor(piece);
   const isLightSquare = (column(square) + row(square)) % 2 === 0;
   const isSelected = selectedSquare === square;
+  const isTarget = true;
 
   if (isSelected)
       console.log("isSelected");
@@ -94,6 +103,7 @@ function createSquareButton(square) {
     'square',
     isLightSquare ? 'light' : 'dark',
     isSelected ? 'selected' : '',
+    isTarget ? 'target' : '',
     piece ? 'piece' : '',
     piece ? `${colorName}-nappula` : ''
   ].filter(Boolean).join(' ');
