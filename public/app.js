@@ -86,6 +86,9 @@ function createSquareButton(square) {
   const isLightSquare = (column(square) + row(square)) % 2 === 0;
   const isSelected = selectedSquare === square;
 
+  if (isSelected)
+      console.log("isSelected");
+
   const button = document.createElement('button');
   button.className = [
     'square',
@@ -101,6 +104,8 @@ function createSquareButton(square) {
 
 function handleSquareClick(square) {
   selectedSquare = square;
+  console.log(square);
+  renderBoard();
 }
 
 function renderBoard() {

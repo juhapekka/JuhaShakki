@@ -51,6 +51,18 @@ main {
     background: #936342;
 }
 
+.square.selected::after {
+    content: '';
+    position: absolute;
+    inset: 33%;
+    border-radius:
+    50%; background: #223e36a8;
+    inset: 7%;
+    border: 4px solid #f3c965;
+    background: transparent;
+}
+
+
 button, select {
     font: inherit;
     border: 1px solid #cf9b58;
