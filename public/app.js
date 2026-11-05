@@ -3,6 +3,7 @@ const boardElement = document.querySelector('#board');
 //lauta
 let board;
 let selectedSquare = null;
+let historia;
 
 // Laudalla on shakkikoodit ('P', 'n, jne) Tehdään taulut missä
 // on koko nimet mitkä yhdistää shakkikoodit näkyviin merkkeihin
@@ -44,6 +45,10 @@ function squareIndex(column, row) {
 
 function isOnBoard(column, row) {
   return column >= 0 && column < 8 && row >= 0 && row < 8;
+}
+
+function siirtotokeni(from, to) {
+  return (from << 6) | to;
 }
 
 function createInitialBoard() {
@@ -325,8 +330,15 @@ function createSquareButton(square) {
 
 function makePlayerMove(move) {
   board = applyMove(board, move);
+  historia.push(siirtotokeni(move.from, move.to));
   selectedSquare = null;
   renderBoard();
+
+  /*
+  for (const x of historia) {
+    console.log(" " + (x&0x3f) + " " + (x>>6));
+  }
+  */
 }
 
 function handleSquareClick(square, isTarget) {
@@ -351,5 +363,10 @@ function renderBoard() {
   }
 }
 
-board = createInitialBoard();
-renderBoard();
+function resetGame() {
+  historia = [];
+  board = createInitialBoard();
+  renderBoard();
+}
+
+resetGame();
