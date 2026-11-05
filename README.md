@@ -18,4 +18,9 @@ Projekti tarvitsee Node.js:n. npm tulee Node.js:n mukana eli sitä ei tarvitse a
    ```sh
    node --version
    npm --version
+   ```
 
+## Testit
+   ```sh
+   npm run test
+   ```
