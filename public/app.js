@@ -292,10 +292,10 @@ function getLegalMoves(position, movingColor) {
 
 
 function isWhiteTargetSquare(square) {
-  if (selectedSquare === null)
+  if (selectedSquare == null)
     return false;
 
-  return getLegalMoves(board, 'valkoinen').some(move => move.from === selectedSquare && move.to === square);
+  return getLegalMoves(board, 'valkoinen').some(move => move.from == selectedSquare && move.to == square);
 }
 
 
@@ -319,11 +319,24 @@ function createSquareButton(square) {
     piece ? `${colorName}-nappula` : ''
   ].filter(Boolean).join(' ');
   button.textContent = getPieceGlyph(piece);
-  button.onclick = () => handleSquareClick(square);
+  button.onclick = () => handleSquareClick(square, isTarget);
   return button;
 }
 
-function handleSquareClick(square) {
+function makePlayerMove(move) {
+  board = applyMove(board, move);
+  selectedSquare = null;
+  renderBoard();
+}
+
+function handleSquareClick(square, isTarget) {
+
+  if (selectedSquare != null && isTarget) {
+    const selectedMove = getLegalMoves(board, 'valkoinen').find(move => move.from == selectedSquare && move.to == square);
+    makePlayerMove(selectedMove);
+    return;
+  }
+
   if (getPieceColor(board[square]) == 'valkoinen') {
     selectedSquare = square;
     renderBoard();
