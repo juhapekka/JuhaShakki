@@ -324,9 +324,11 @@ function createSquareButton(square) {
 }
 
 function handleSquareClick(square) {
-  selectedSquare = square;
-  console.log(square);
-  renderBoard();
+  if (getPieceColor(board[square]) == 'valkoinen') {
+    selectedSquare = square;
+    renderBoard();
+  }
+
 }
 
 function renderBoard() {
