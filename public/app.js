@@ -234,14 +234,14 @@ function generateMoves(position, from, attackOnly = false) {
     addPawnMoves(position, moves, from, attackOnly);
   else if (pieceType == 'n') 
     addKnightMoves(position, moves, from);
-  else if (pieceType == 'k')
-    addKingMoves(position, moves, from);
   else if (pieceType == 'b')
     addSlidingMoves(position, moves, from, [[1, 1], [1, -1], [-1, 1], [-1, -1]]);
   else if (pieceType == 'r')
     addSlidingMoves(position, moves, from, [[1, 0], [-1, 0], [0, 1], [0, -1]]);
   else if (pieceType == 'q')
     addSlidingMoves(position, moves, from, [[1, 1], [1, -1], [-1, 1], [-1, -1], [1, 0], [-1, 0], [0, 1], [0, -1]]);
+  else if (pieceType == 'k')
+    addKingMoves(position, moves, from);
 
   // Matti tunnistetaan jos kuningasta vastaan hyökätään ja kuninkaalla
   // ei ole laillisia siirtoja
