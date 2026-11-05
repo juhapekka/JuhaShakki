@@ -45,7 +45,7 @@ function squareIndex(column, row) {
 function isOnBoard(column, row) {
   return column >= 0 && column < 8 && row >= 0 && row < 8;
 }
-/*
+
 function createInitialBoard() {
   return [
     'R', 'N', 'B', 'Q', 'K', 'B', 'N', 'R',
@@ -54,16 +54,7 @@ function createInitialBoard() {
     'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p',
     'r', 'n', 'b', 'q', 'k', 'b', 'n', 'r'
   ];
-}*/
-
-function createInitialBoard() {
-  return [
-    'R', 'N', 'B', 'Q', 'K', 'B', 'N', 'R',
-    ...Array(32 + 2*8).fill(null),
-    'r', 'n', 'b', 'q', 'k', 'b', 'n', 'r'
-  ];
 }
-
 
 function getSquareDisplayOrder() {
   const squares = [];
