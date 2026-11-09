@@ -1,9 +1,11 @@
 const boardElement = document.querySelector('#board');
+const statusElement = document.querySelector('#status');
 
 //lauta
 let board;
 let selectedSquare = null;
 let historia;
+let isGameFinished;
 
 // Laudalla on shakkikoodit ('P', 'n, jne) Tehdään taulut missä
 // on koko nimet mitkä yhdistää shakkikoodit näkyviin merkkeihin
@@ -328,11 +330,36 @@ function createSquareButton(square) {
   return button;
 }
 
+function checkForGameEnd(sideToMove) {
+  const legalMoves = getLegalMoves(board, sideToMove);
+
+  if (legalMoves.length)
+    return false;
+
+  const king = sideToMove == 'valkoinen' ? 'K' : 'k';
+  const kingSquare = board.indexOf(king);
+  const isCheckmate = isSquareAttacked(board, kingSquare, getOpponentColor(sideToMove));
+
+  isGameFinished = true;
+
+  if (isCheckmate) {
+    statusElement.textContent = sideToMove == 'valkoinen' ? 'Matti - tietokone voitti' : 'Matti - sä voitit';
+  } else {
+    statusElement.textContent = 'Tasapeli.';
+  }
+
+  return true;
+}
+
 function makePlayerMove(move) {
   board = applyMove(board, move);
   historia.push(siirtotokeni(move.from, move.to));
   selectedSquare = null;
   renderBoard();
+
+  if (!checkForGameEnd('musta')) {
+
+  }
 
   /*
   for (const x of historia) {
@@ -342,6 +369,8 @@ function makePlayerMove(move) {
 }
 
 function handleSquareClick(square, isTarget) {
+  if (isGameFinished)
+    return;
 
   if (selectedSquare != null && isTarget) {
     const selectedMove = getLegalMoves(board, 'valkoinen').find(move => move.from == selectedSquare && move.to == square);
@@ -365,6 +394,7 @@ function renderBoard() {
 
 function resetGame() {
   historia = [];
+  isGameFinished = false;
   board = createInitialBoard();
   renderBoard();
 }
