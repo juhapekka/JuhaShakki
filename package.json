@@ -4,7 +4,7 @@
   "description": "Algoritmit ja tekoäly",
   "main": "index.js",
   "scripts": {
-    "test": "node --test"
+    "test": "node --test test/*.test.js"
   },
   "repository": {
     "type": "git",

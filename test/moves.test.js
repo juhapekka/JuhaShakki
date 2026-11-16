@@ -1,27 +1,6 @@
 const assert = require('node:assert/strict');
-const { readFileSync } = require('node:fs');
 const { test } = require('node:test');
-const { createContext, runInContext } = require('node:vm');
-
-const source = readFileSync(require.resolve('../public/app.js'), 'utf8');
-
-function loadApp() {
-	const lauta = {
-		children: [],
-		replaceChildren() { this.children = []; },
-		append(button) { this.children.push(button); }
-	};
-	const app = createContext({
-		document: {
-			querySelector: () => lauta,
-			createElement: () => ({})
-		}
-	});
-
-	runInContext(source, app);
-	
-	return { app, lauta };
-}
+const { loadApp } = require('./helpers/load-app');
 
 function paikka(pieces) {
 	return Object.assign(Array(64).fill(null), pieces);
@@ -39,15 +18,18 @@ test('kuningas voi siirtyä kaikkiin kahdeksaan viereiseen ruutuun', () => {
 	assert.deepEqual(targets(app, paikka({ 27: 'K', 63: 'k' }), 27), [18, 19, 20, 26, 28, 34, 35, 36]);
 });
 
-test('kuninkaan siirrot eivät kierrä laudan reunan yli', () => {
+test('kuninkaan siirrot ei kierrä laudan reunan yli', () => {
 	const { app } = loadApp();
 
 	assert.deepEqual(targets(app, paikka({ 0: 'K', 63: 'k' }), 0), [1, 8, 9]);
 });
 
-test('nykyisessä aloitusasemassa kuningattaret estävät siirrot vasemmalle', () => {
+test('sotilaattomassa asemassa kuningattaret estävät siirrot vasemmalle', () => {
 	const { app } = loadApp();
-	const board = app.createInitialBoard();
+	const board = paikka({
+		0: 'R', 1: 'N', 2: 'B', 3: 'Q', 4: 'K', 5: 'B', 6: 'N', 7: 'R',
+		56: 'r', 57: 'n', 58: 'b', 59: 'q', 60: 'k', 61: 'b', 62: 'n', 63: 'r'
+	});
 	
 	assert.equal(board[62], 'n');
 	assert.equal(board[61], 'b');
@@ -79,7 +61,7 @@ test('kuninkaan siirron tai syönnin paljastama tornin uhka estää siirron', ()
 	assert.equal(targets(app, paikka({ 4: 'K', 63: 'k', 12: 'n', 60: 'r' }), 4).includes(12), false);
 });
 
-test('tavallisessa aloitusasemassa on 20 laillista siirtoa kummallekin värille', () => {
+test('tavallisessa aloitusasemassa on 20 laillista siirtoa molemmille pelaajille', () => {
 	const { app } = loadApp();
 
 	const boardi = [
@@ -95,22 +77,22 @@ test('tavallisessa aloitusasemassa on 20 laillista siirtoa kummallekin värille'
 	assert.deepEqual(boardi, ennen);
 });
 
-test('klikkaus korostaa valitun valkoisen nappulan lailliset kohteet', () => {
-	const { app, boardElement } = loadApp();
+test('klikkaus korostaa valitun valkoisen nappulan lailliset siirrot', () => {
+	const { app, lauta } = loadApp();
 
-	app.handleSquareClick(4);
+	// e2 sotilas voi siirtyä ruutuihin e3 ja e4
+	app.handleSquareClick(12);
 
-	const highlighted = boardElement.children
+	const highlighted = lauta.children
 		.map((button, index) => button.className.split(' ').includes('target')
 		? app.getSquareDisplayOrder()[index] : null)
 		.filter(square => square !== null)
 		.sort((a, b) => a - b);
 	
-	assert.deepEqual(highlighted, [12, 13]);
+	assert.deepEqual(highlighted, [20, 28]);
 
+	// toisen pejaana nappulan tai tyhjän ruudun klikkaus ei vaihda valittua nappulaa
 	app.handleSquareClick(62);
-	assert.equal(boardElement.children.some(button => button.className.split(' ').includes('target')), false);
-
 	app.handleSquareClick(24);
-	assert.equal(boardElement.children.some(button => button.className.split(' ').includes('target')), false);
+	assert.equal(lauta.children.filter(button => button.className.split(' ').includes('target')).length, 2);
 });
