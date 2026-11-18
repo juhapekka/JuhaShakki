@@ -51,36 +51,6 @@ const VAIKEUS_ASETUKSET = Object.freeze({
 
 const difficultyElement = document.querySelector('#vaikeus');
 
-function column(square) {
-  return square & 7;
-}
-
-function row(square) {
-  return square >> 3;
-}
-
-function squareIndex(column, row) {
-  return row * 8 + column;
-}
-
-function isOnBoard(column, row) {
-  return column >= 0 && column < 8 && row >= 0 && row < 8;
-}
-
-function siirtotokeni(from, to) {
-  return (from << 6) | to;
-}
-
-function createInitialBoard() {
-  return [
-    'R', 'N', 'B', 'Q', 'K', 'B', 'N', 'R',
-    'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P',
-    ...Array(32).fill(null),
-    'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p',
-    'r', 'n', 'b', 'q', 'k', 'b', 'n', 'r'
-  ];
-}
-
 function getSquareDisplayOrder() {
   const squares = [];
 
@@ -92,17 +62,6 @@ function getSquareDisplayOrder() {
   return squares;
 }
 
-function squareName(square) {
-  return String.fromCharCode(97 + column(square)) + (row(square) + 1);
-}
-
-function getPieceColor(piece) {
-  if (!piece)
-    return null;
-
-  return piece === piece.toUpperCase() ? 'valkoinen' : 'musta';
-}
-
 function getPieceGlyph(piece) {
   if (!piece)
     return '';
@@ -110,10 +69,6 @@ function getPieceGlyph(piece) {
   const colorName = getPieceColor(piece);
   const pieceName = PIECE_NAMES[piece.toLowerCase()];
   return PIECE_GLYPHS[`${colorName}${pieceName}`];
-}
-
-function getOpponentColor(color) {
-  return color == 'valkoinen' ? 'musta' : 'valkoinen';
 }
 
 function addMoveIfAvailable(position, moves, from, to) {
@@ -275,20 +230,6 @@ function isSquareAttacked(position, square, attackingColor) {
   }
 
   return false;
-}
-
-function applyMove(position, move) {
-  const nextPosition = [...position];
-  const movingPiece = nextPosition[move.from];
-  nextPosition[move.to] = movingPiece;
-  nextPosition[move.from] = null;
-
-  const reachesLastRank = row(move.to) == 0 || row(move.to) == 7;
-
-  if (movingPiece.toLowerCase() === 'p' && reachesLastRank)
-    nextPosition[move.to] = getPieceColor(movingPiece) == 'valkoinen' ? 'Q' : 'q';
-
-  return nextPosition;
 }
 
 function getLegalMoves(position, movingColor) {
@@ -493,10 +434,6 @@ function chooseSearchedMove(hakysyvyys) {
   return maxSiirto;
 }
 
-function move2str(move) {
-  return squareName(move.from) + squareName(move.to);
-}
-
 function asetaVaikeus() {
   return VAIKEUS_ASETUKSET[difficultyElement.value];
 }
@@ -516,16 +453,16 @@ function makeComputerMove() {
 
   board = applyMove(board, move);
   
-  historia.push(siirtotokeni(move.from, move.to));
+  historia.push(encodeMove(move.from, move.to));
 
-  statusElement.textContent = `Tietokone pleasi ${move2str(move)}. Sun vuoro.`;
+  statusElement.textContent = `Tietokone pleasi ${moveToString(move)}. Sun vuoro.`;
   renderBoard();
   checkForGameEnd('valkoinen');
 }
 
 function makePlayerMove(move) {
   board = applyMove(board, move);
-  historia.push(siirtotokeni(move.from, move.to));
+  historia.push(encodeMove(move.from, move.to));
   selectedSquare = null;
   renderBoard();
 
