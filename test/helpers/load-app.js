@@ -1,7 +1,12 @@
 const { readFileSync } = require('node:fs');
 const { createContext, runInContext } = require('node:vm');
 
-const source = readFileSync(require.resolve('../../public/app.js'), 'utf8');
+// tässä pitää olla sama latausjärjestys kuin index.html:ssä
+// app.js käynnistää pelin viimeisenä
+const scripts = ['board.js', 'moves.js', 'ai.js', 'ui.js', 'app.js'].map(filename => ({
+	filename,
+	source: readFileSync(require.resolve(`../../public/${filename}`), 'utf8')
+}));
 
 // Testeille korvikeselain :) käyttöliittymän elementit pitää lisää tänne
 function loadApp(difficulty = 'vaikea') {
@@ -25,7 +30,9 @@ function loadApp(difficulty = 'vaikea') {
 			createElement: () => ({})
 		}
 	});
-	runInContext(source, app);
+	for (const { filename, source } of scripts) {
+		runInContext(source, app, { filename });
+	}
 	return { app, lauta, statusElement, difficultyElement, newGameElement };
 }
 
