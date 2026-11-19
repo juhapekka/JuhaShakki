@@ -1,3 +1,13 @@
+// nappuloiden arvostus
+const PIECE_VALUES = Object.freeze({
+	p: 100,
+	n: 320,
+	b: 330,
+	r: 500,
+	q: 900,
+	k: 0
+});
+
 // evaluateSituationForBlack on mutu heuristiikka
 // idea on arvioida tilannetta sotilaiden, ratsujen ja lähettiensä keskustan sijainnin suhteen
 // pisteytys on mustan perspektiivistä -> positiivinen arvo -> suosii mustaa
