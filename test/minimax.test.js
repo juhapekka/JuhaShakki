@@ -1,6 +1,5 @@
 const assert = require('node:assert/strict');
 const { test } = require('node:test');
-const { runInContext } = require('node:vm');
 const { loadApp } = require('./helpers/load-app');
 
 function paikka(pieces) {
@@ -68,9 +67,7 @@ test('siirtohaku valitsee ilmaisen kuningattaren eikä muuta alkuperäistä laut
 	const { app } = loadApp();
 	const board = paikka({ 0: 'K', 63: 'k', 40: 'r', 24: 'Q' });
 	const ennen = [...board];
-	app.testBoard = board;
-	runInContext('board = testBoard', app);
-	const move = app.chooseSearchedMove(1);
+	const move = app.chooseSearchedMove(board, 1);
 	assert.equal(move.from, 40);
 	assert.equal(move.to, 24);
 	assert.deepEqual(board, ennen);

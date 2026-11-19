@@ -1,8 +1,3 @@
-//lauta
-let board;
-let selectedSquare = null;
-let historia;
-let isGameFinished;
 
 function checkForGameEnd(sideToMove) {
   const legalMoves = getLegalMoves(board, sideToMove);
@@ -30,7 +25,7 @@ function makeComputerMove() {
     return;
 
   const difficulty = getSelectedDifficulty();
-  const move = chooseSearchedMove(difficulty.depth);
+  const move = chooseSearchedMove(board, difficulty.depth);
 
   if (!move)
     return;

@@ -33,6 +33,7 @@ const DIFFICULTY_SETTINGS = Object.freeze({
 const difficultyElement = document.querySelector('#vaikeus');
 const boardElement = document.querySelector('#board');
 const statusElement = document.querySelector('#status');
+let selectedSquare = null;
 
 function getSquareDisplayOrder() {
 	const squares = [];

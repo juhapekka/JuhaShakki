@@ -9,7 +9,7 @@ const scripts = ['board.js', 'moves.js', 'ai.js', 'ui.js', 'app.js'].map(filenam
 }));
 
 // Testeille korvikeselain :) käyttöliittymän elementit pitää lisää tänne
-function loadApp(difficulty = 'vaikea') {
+function loadApp(difficulty = 'normal') {
 	const lauta = {
 		children: [],
 		replaceChildren() { this.children = []; },
