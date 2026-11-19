@@ -43,10 +43,10 @@ const PIECE_VALUES = Object.freeze({
   k: 0
 });
 
-const VAIKEUS_ASETUKSET = Object.freeze({
-  helppo: { nimi: 'Helppo', syvyys: 0 },
-  normaali: { nimi: 'Normaali', syvyys: 1 },
-  vaikea: { nimi: 'vaikea', syvyys: 2 }
+const DIFFICULTY_SETTINGS = Object.freeze({
+  easy: { name: 'Helppo', depth: 0 },
+  normal: { name: 'Normaali', depth: 1 },
+  difficult: { name: 'vaikea', depth: 2 }
 });
 
 const difficultyElement = document.querySelector('#vaikeus');
@@ -76,11 +76,8 @@ function makeComputerMove() {
   if (isGameFinished || checkForGameEnd('musta'))
     return;
 
-  vaikeus = getSelectedDifficulty();
-
-
-  //console.log("syvyys " + vaikeus.syvyys);
-  move = chooseSearchedMove(vaikeus.syvyys);
+  const difficulty = getSelectedDifficulty();
+  const move = chooseSearchedMove(difficulty.depth);
 
   if (!move)
     return;
@@ -133,8 +130,8 @@ function resetGame() {
   historia = [];
   isGameFinished = false;
   selectedSquare = null;
-  vaikeus = getSelectedDifficulty();
-  statusElement.textContent = `Sun siirto, sä pelaat valkoisilla. ${vaikeus.nimi} vaikeus aste.`;
+  const difficulty = getSelectedDifficulty();
+  statusElement.textContent = `Sun siirto, sä pelaat valkoisilla. ${difficulty.name} vaikeus aste.`;
   board = createInitialBoard();
   renderBoard();
 }

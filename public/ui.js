@@ -59,5 +59,5 @@ function renderBoard() {
 }
 
 function getSelectedDifficulty() {
-	return VAIKEUS_ASETUKSET[difficultyElement.value];
+	return DIFFICULTY_SETTINGS[difficultyElement.value];
 }
