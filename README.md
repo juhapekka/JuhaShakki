@@ -35,6 +35,7 @@ Projektissa mukana olevat testit voi ajaa suorittamalla projektin juuressa
 
 - [Määrittelydokumentti](dokumentit/Määrittelydokumentti.md)
 - [Toteutusdokumentti](dokumentit/Toteutusdokumentti.md)
+- [Testausdokumentti](dokumentit/Testausdokumentti.md)
 - [Viikkoraportti 1](dokumentit/Viikkoraportti1.md)
 - [Viikkoraportti 2](dokumentit/Viikkoraportti2.md)
 - [Viikkoraportti 3](dokumentit/Viikkoraportti3.md)
