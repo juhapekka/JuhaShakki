@@ -13,20 +13,15 @@ test('uusi peli näyttää valitun vaikeusasteen statustekstissä', () => {
 });
 
 test('tietokone lukee valitun vaikeusateen ja käyttää oikeaa hakusyvyyttä', () => {
-	const { app, difficultyElement } = loadApp();
-	let hakusyvyys;
-	
-	// Katotaan haulle menevä syvyys ilman hakua
-	app.chooseSearchedMove = (position, depth) => {
-		assert.deepEqual(Array.from(position), Array.from(app.createInitialBoard()));
-		hakusyvyys = depth;
-		return undefined;
-	};
+	const { app, difficultyElement, workers } = loadApp();
 
-	for (const [vaikeus, odotettuSyvyys] of [['easy', 0], ['normal', 1], ['difficult', 2]]) {
-		hakusyvyys = undefined;
+	for (const [vaikeus, odotettuSyvyys] of [['easy', 0], ['normal', 2], ['difficult', 5]]) {
 		difficultyElement.value = vaikeus;
 		app.makeComputerMove();
-		assert.equal(hakusyvyys, odotettuSyvyys, vaikeus);
+		const worker = workers.at(-1);
+		assert.equal(worker.filename, 'ai-worker.js');
+		assert.equal(worker.messages[0].depth, odotettuSyvyys, vaikeus);
+		assert.deepEqual(worker.messages[0].position, Array.from(app.createInitialBoard()));
+		app.resetGame();
 	}
 });

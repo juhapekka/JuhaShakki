@@ -26,8 +26,8 @@ const PIECE_NAMES = Object.freeze({
 
 const DIFFICULTY_SETTINGS = Object.freeze({
 	easy: { name: 'Helppo', depth: 0 },
-	normal: { name: 'Normaali', depth: 1 },
-	difficult: { name: 'vaikea', depth: 2 }
+	normal: { name: 'Normaali', depth: 2 },
+	difficult: { name: 'vaikea', depth: 5 }
 });
 
 const difficultyElement = document.querySelector('#vaikeus');

@@ -10,6 +10,28 @@ const scripts = ['board.js', 'moves.js', 'ai.js', 'ui.js', 'app.js'].map(filenam
 
 // Testeille korvikeselain :) käyttöliittymän elementit pitää lisää tänne
 function loadApp(difficulty = 'normal') {
+	const workers = [];
+	const timers = new Map();
+	let nextTimerId = 1;
+	// worker ja ajastimet käynnistetään testeissä hallitusti
+	class TestWorker {
+		constructor(filename) {
+			this.filename = filename;
+			this.messages = [];
+			this.terminated = false;
+			workers.push(this);
+		}
+		postMessage(message) { this.messages.push(structuredClone(message)); }
+		terminate() { this.terminated = true; }
+		respond(move) { this.onmessage({ data: structuredClone(move) }); }
+	}
+	function runTimers() {
+		const callbacks = [...timers.values()];
+		timers.clear();
+		for (const callback of callbacks)
+			callback();
+	}
+
 	const lauta = {
 		children: [],
 		replaceChildren() { this.children = []; },
@@ -25,6 +47,13 @@ function loadApp(difficulty = 'normal') {
 		'#uusipeli': newGameElement
 	};
 	const app = createContext({
+		Worker: TestWorker,
+		setTimeout: callback => {
+			const id = nextTimerId++;
+			timers.set(id, callback);
+			return id;
+		},
+		clearTimeout: id => timers.delete(id),
 		document: {
 			querySelector: selector => elements[selector] ?? null,
 			createElement: () => ({})
@@ -33,7 +62,7 @@ function loadApp(difficulty = 'normal') {
 	for (const { filename, source } of scripts) {
 		runInContext(source, app, { filename });
 	}
-	return { app, lauta, statusElement, difficultyElement, newGameElement };
+	return { app, lauta, statusElement, difficultyElement, newGameElement, workers, timers, runTimers };
 }
 
 module.exports = { loadApp };
