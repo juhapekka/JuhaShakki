@@ -52,6 +52,7 @@ Projektissa mukana olevat testit voi ajaa suorittamalla projektin juuressa
 - [Viikkoraportti 2](dokumentit/Viikkoraportti2.md)
 - [Viikkoraportti 3](dokumentit/Viikkoraportti3.md)
 - [Viikkoraportti 4](dokumentit/Viikkoraportti4.md)
+- [Viikkoraportti 5](dokumentit/Viikkoraportti5.md)
 
 ## Nykyinen tila
 - toteuttamattomat shakkisäännöt:
