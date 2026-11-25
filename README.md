@@ -5,7 +5,19 @@ Live versio projektin kehityksestä nähtävissä täällä https://juhapekka.gi
 
 ## Käynnistäminen ja pelaaminen
 
-Peli käynnistetään avaamalla public/index.html tiedosto selaimessa. Käyttöliittymässä on vaikeusasteen valinta (helppo/normaali/vaikea), pelin uudelleen käynnistäminen ja itse shakkilauta. Peli aloitetaan tekemällä ensimmäinen siirto valkoisilla nappuloilla. Siirron jälkeen tietokone tekee vastasiirron. Vaikeusastetta voi vaihtaa pelin kuluessa ja se vaikuttaa tietokoneen seuraavaan siirtoon.
+Tietokoneen siirto lasketaan Web Workerissa. Käynnistä peli HTTP-palvelimen kautta koska suora public/index.html-tiedoston avaaminen selaimessa ei riitä workerin lataamiseen
+
+Esimerkiksi jos Python 3 on asennettu, suorita projektin juuressa:
+
+```sh
+python3 -m http.server 8000 --directory public --bind 127.0.0.1
+```
+
+Avaa sitten [http://127.0.0.1:8000](http://127.0.0.1:8000). 
+
+Palvelimen voi pysäyttää painamalla Ctrl+C. Myös esimerkiksi VS Coden Live Server sopii paikalliseen käynnistämiseen. Julkaistua peliä voi pelata suoraan selaimessa.
+
+Käyttöliittymässä on vaikeusasteen valinta (helppo/normaali/vaikea), pelin uudelleen käynnistäminen ja itse shakkilauta. Peli aloitetaan tekemällä ensimmäinen siirto valkoisilla nappuloilla. Siirron jälkeen tietokone tekee vastasiirron. Pelaajan siirrot on estetty tietokoneen vuoron ajan, mutta uuden pelin voi aloittaa myös laskennan aikana. Vaikeusastetta voi vaihtaa pelin kuluessa ja se vaikuttaa seuraavan haun alussa valittavaan hakusyvyyteen.
 
 ## Kehitysympäristön asennus
 

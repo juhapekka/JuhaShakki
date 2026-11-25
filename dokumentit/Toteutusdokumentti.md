@@ -12,10 +12,13 @@ JuhaShakki on JavaScriptillä toteutettu selaimessa toimiva shakkipeli. Käyttä
 | [board.js](../public/board.js) | Laudan tilanne, koordinaatit, nappuloiden värit, siirron soveltaminen ja siirtohistorian koodaus |
 | [moves.js](../public/moves.js) | Siirtoehdokkaiden listaaminen, hyökkäysten tunnistaminen ja laillisten siirtojen listaus |
 | [ai.js](../public/ai.js) | Aseman pisteytys, siirtojen järjestäminen ja alpha–beta karsittu minimax-haku |
+| [ai-worker.js](../public/ai-worker.js) | Hakulogiikan lataaminen workeriin ja siirron palauttaminen käyttöliittymälle |
 | [ui.js](../public/ui.js) | Laudan piirtäminen, siirtojen korostukset ja vaikeusvalinnan lukeminen |
 | [app.js](../public/app.js) | Pelaajan ja tietokoneen vuorot, pelin päättymisen käsittely ja uuden pelin aloittaminen |
 
 Tiedostot suoritetaan HTML:ssä taulukossa nähdyssä järjestyksessä. Ne käyttävät yhteistä globaalia ympäristöä; toteutus ei käytä import/export-moduuleja. Testien [lataaja](../test/helpers/load-app.js) suorittaa samat tiedostot samassa järjestyksessä ja korvaa tarvitut käyttöliittymäelementit pienillä testiolioilla.
+
+Poikkeuksena ai-worker.js käynnistetään Worker-rajapinnalla tietokoneen vuorolla. Se lataa board.js-, moves.js- ja ai.js-tiedostot omaan ympäristöönsä. Pääsäie lähettää laudan ja hakusyvyyden, worker palauttaa siirron. Pelaajan siirrot estetään tietokoneen vuorolla. Uusi peli peruu odottavan ajastimen ja lopettaa käynnissä olevan workerin; vanhan haun vastaukset hylätään.
 
 ## Tietorakenteet ja lailliset siirrot
 
@@ -87,7 +90,7 @@ Hakupuuta ei tallenneta kokonaan. Rekursiopinossa säilyvät kuitenkin lautojen 
 - Tornausta ja ohestalyöntiä ei ole toteutettu sotilas korotetaan automaattisesti kuningattareksi.
 - Tasapeleistä tunnistetaan vain patti. Aseman toistumista tai kuollutta asemaa ei tunnisteta.
 - Haku on matala ja arviointifunktio yksinkertainen. Syvyys haun takana oleva vastustajan uhka jää huomaamatta.
-- Haku suoritetaan selaimen pääsäikeessä -> syvyyden kasvattaminen voi jäädyttää käyttöliittymän laskennan ajaksi!
+- Haku suoritetaan workerissa, mutta aikarajaa ei ole toteutettu. Syvyyden kasvattaminen voi pidentää tietokoneen vuoroa huomattavasti, vaikka käyttöliittymä pysyy käytettävissä.
 - Laudan piirtäminen laskee valkoisen lailliset siirrot uudelleen jokaiselle piirrettävälle ruudulle, kun nappula on valittuna -> se voitaisiin laskea kerran piirtoa kohti
 - Tiedostot jakavat globaalin pelitilan. Nimeämistä, parametrien välitystä ja moduulirajoja voisi yhtenäistää
 

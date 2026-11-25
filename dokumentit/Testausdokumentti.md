@@ -8,6 +8,8 @@ Automaattiset testit on toteutettu node.js:n node:test testikehyksellä ja node:
 
 Testien [lataaja](../test/helpers/load-app.js) suorittaa pelin JavaScript-tiedostot eristetyssä node:vm ympäristössä samassa järjestyksessä kuin HTML sivu suorittaisi. Jokainen lataus luo uuden testiympäristön. Käyttöliittymän tarvitsemat elementit korvataan olioilla joiden avulla voidaan tutkia esimerkiksi korostettuja ruutuja ja tilatekstiä.
 
+Worker-vastaukset ja ajastimet ohjataan testeissä käsin, jotta kesken haun tapahtuva uuden pelin aloitus ja myöhästyneet vastaukset voidaan testata toistettavasti. Lisäksi workerin oma skripti suoritetaan erillisessä vm-ympäristössä, jossa se lataa oikeat hakulogiikan tiedostot ilman käyttöliittymää.
+
 Testit tarkistavat sekä yksittäisiä toimintoja että useamman toiminnon yhteistyötä. Ne eivät käytä oikeaa selainta eivätkä testaa sivun ulkoasua tai koko peliketjua pelaajan klikkauksesta tietokoneen vastasiirtoon.
 
 ## Mitä on testattu?
@@ -19,6 +21,7 @@ Testeissä käytetään tavallista aloitusasemaa, käsin kirjoitettuja lautatila
 | [moves.test.js](../test/moves.test.js) | 7 | Kuninkaan liikkeet, uhattujen ruutujen välttäminen, aloitusaseman siirrot ja käyttöliittymän kohderuutujen korostus. |
 | [minimax.test.js](../test/minimax.test.js) | 6 | Arviointifunktio, syvyysraja, maksimointi ja minimointi, matti ja patti, siirtovalinta sekä alpha–beta-karsinta. |
 | [difficulty.test.js](../test/difficulty.test.js) | 2 | Vaikeusasteen näyttäminen ja valitun vaikeuden välittäminen haulle. |
+| [worker.test.js](../test/worker.test.js) | 6 | Worker-skriptin hakutulos, vuoron lukitus, ajastimen ja haun peruminen, vanhat vastaukset sekä workerin virheet. |
 
 Seuraavat esimerkit kuvaavat testien syötteitä ja odotettuja tuloksia. Niiden tarkistukset läpäisivät viikolla4 suoritetun testiajon
 
@@ -33,7 +36,7 @@ Seuraavat esimerkit kuvaavat testien syötteitä ja odotettuja tuloksia. Niiden 
 | Musta kuningas a8:ssa, valkoinen kuningatar c7:ssä ja valkoinen kuningas c6:ssa | Mustan patti tunnistetaan ja tulos on 0 syvyyksillä 0 ja 2. |
 | Keinotekoinen hakupuu max(min(3, 5), min(2, 100)) | Tulos on 3. Vain lehdet 3, 5 ja 2 arvioidaan: lehti 100 karsitaan. Vastaluvuilla ja valkoisen vuorolla tulos on -3 ja vastaava karsinta toimii. |
 | Aloitusasemassa valitaan e2-sotilas | Käyttöliittymä korostaa e3- ja e4-ruudut. Vastustajan nappulan tai muun tyhjän ruudun valitseminen ei vaihda valintaa. |
-| Vaikeusvalinnat easy, normal ja difficult | Haulle välitetään nykyinen lauta ja vastaavasti syvyys 0, 1 tai 2. Tässä testissä hakufunktio korvataan kutsun tarkistavalla funktiolla. Uuden pelin tilatekstin testissä varmistetaan myös valitun vaikeuden näkyminen. |
+| Vaikeusvalinnat easy, normal ja difficult | Workerille lähetetään nykyinen lauta ja vastaavasti syvyys 0, 2 tai 5. Testissä worker korvataan viestit tallentavalla oliolla. Uuden pelin tilatekstin testissä varmistetaan myös valitun vaikeuden näkyminen. |
 
 Arviointifunktion testeissä varmistetaan lisäksi kuningattaren pisteiden etumerkki ja sotilaan, ratsun ja lähetin keskustassa sijaitsemisen hyöty. Sotilaattomalla lähtöasemalla tarkistetaan myös että omat nappulat ja vastustajan kuningattaren uhka estävät kuninkaan siirrot oikein.
 
@@ -51,7 +54,7 @@ Yksittäisen testitiedoston voi ajaa esimerkiksi näin:
 node --test test/minimax.test.js
 ```
 
-Tarkistusajossa viikolla4 oli käytössä node.js v22.13.0. Kaikki 15 testiä läpäisivät eikä testejä ohitettu.
+Tarkistusajossa 23.11.2026 oli käytössä node.js v22.13.0. Kaikki 21 testiä läpäisivät eikä testejä ohitettu.
 
 ## Yksikkötestauksen kattavuusraportti
 
