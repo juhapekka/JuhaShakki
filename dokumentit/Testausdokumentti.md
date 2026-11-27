@@ -54,19 +54,31 @@ Yksittäisen testitiedoston voi ajaa esimerkiksi näin:
 node --test test/minimax.test.js
 ```
 
-Tarkistusajossa 23.11.2026 oli käytössä node.js v22.13.0. Kaikki 21 testiä läpäisivät eikä testejä ohitettu.
+Testiajossa 28.11.2026 oli käytössä node.js v22.13.0. Kaikki 21 testiä läpäisivät eikä testejä ohitettu.
 
 ## Yksikkötestauksen kattavuusraportti
 
-Pelikoodin rivi-, haara- ja funktiokattavuutta ei ole saatu mitattua luotettavasti. Node.js:n kattavuusajoa kokeiltiin komennolla:
+Kattavuus mitataan Node.js:n omalla testikehyksellä ilman ulkoisia riippuvuuksia. Raportin voi toistaa suorittamalla projektin juuressa:
 
 ```sh
-node --experimental-test-coverage --test test/*.test.js
+npm run test:coverage
 ```
 
-Nykyisellä vm-pohjaisella lataajalla raporttiin tulee vain testitiedostot ja testiapukoodi. public-hakemistoja tiedostoja ei listattu raporttiin. Raportin näyttämä 100%:n rivikattavuus ei siis kuvannut pelin kattavuutta vaan suoritettujen testikoodirivien kattavuutta mistä ei ole tässä hyötyä.
+Komento käyttää --experimental-test-coverage toimintoa ja rajaa raportin public/*.js-tiedostoihin. Testiapukoodi ei siis vaikuta alla oleviin prosentteihin. Testilatauksissa vm-ympäristölle annetaan lähdetiedostojen absoluuttiset polut minkä avulla mittaus tunnistaa myös vm:ssä suoritettavan pelikoodin.
 
-...tähän täytyy kattoa josko löytyy parempaa coveragea
+Mittaus 28.11.2026, Node.js v22.13.0, kaikki 21 testiä läpäisivät:
+
+| Tiedosto | Rivit % | Haarat % | Funktiot % |
+|---|---:|---:|---:|
+| [ai-worker.js](../public/ai-worker.js) | 100,00 | 100,00 | 100,00 |
+| [ai.js](../public/ai.js) | 100,00 | 100,00 | 100,00 |
+| [app.js](../public/app.js) | 92,86 | 88,57 | 100,00 |
+| [board.js](../public/board.js) | 100,00 | 95,83 | 100,00 |
+| [moves.js](../public/moves.js) | 100,00 | 97,30 | 100,00 |
+| [ui.js](../public/ui.js) | 100,00 | 100,00 | 87,50 |
+| **Pelikoodi yhteensä** | **98,41** | **96,41** | **97,83** |
+
+Rivikattavuus kertoo suoritetut rivit, haarakattavuus ehtojen eri suorituspolut ja funktiokattavuus nimensä mukaisesti kutsutut funktiot. Esimerkiksi app.js:n suorittamatta jäivät raportin mukaan rivit 28, 36..41 ja 64..66. Rivinumerot ja prosentit muuttuvat koodin ja testien kehittyessä; ajantasaiset tiedot saa yllä olevalla komennolla.
 
 ## Testauksen rajaukset ja kehitys
 

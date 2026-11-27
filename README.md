@@ -43,6 +43,14 @@ Projektissa mukana olevat testit voi ajaa suorittamalla projektin juuressa
    npm run test
    ```
 
+Pelikoodin kattavuusraportin saa komennolla:
+
+```sh
+npm run test:coverage
+```
+
+Raportti sisältää vain public hakemiston tiedostot. Tulokset löytyvät [testausdokumentista](dokumentit/Testausdokumentti.md)
+
 ## Dokumentit
 
 - [Määrittelydokumentti](dokumentit/Määrittelydokumentti.md)
