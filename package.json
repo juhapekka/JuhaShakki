@@ -4,7 +4,8 @@
   "description": "Algoritmit ja tekoäly",
   "main": "index.js",
   "scripts": {
-    "test": "node --test test/*.test.js"
+    "test": "node --test test/*.test.js",
+    "test:coverage": "node --experimental-test-coverage --test-coverage-include=\"public/*.js\" --test test/*.test.js"
   },
   "repository": {
     "type": "git",

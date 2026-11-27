@@ -3,8 +3,9 @@ const { createContext, runInContext } = require('node:vm');
 
 // tässä pitää olla sama latausjärjestys kuin index.html:ssä
 // app.js käynnistää pelin viimeisenä
+// Absoluuttinen tiedostopolku yhdistää vm-koodin kattavuusraportissa lähdetiedostoon.
 const scripts = ['board.js', 'moves.js', 'ai.js', 'ui.js', 'app.js'].map(filename => ({
-	filename,
+	filename: require.resolve(`../../public/${filename}`),
 	source: readFileSync(require.resolve(`../../public/${filename}`), 'utf8')
 }));
 

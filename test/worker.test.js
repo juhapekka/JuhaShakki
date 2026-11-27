@@ -21,12 +21,12 @@ test('worker lataa pelilogiikan ja löytää kuningattaren syönnin ilman käytt
 	worker.importScripts = (...filenames) => {
 		for (const filename of filenames) {
 			const path = require.resolve(`../public/${filename}`);
-			runInContext(readFileSync(path, 'utf8'), worker, { filename });
+			runInContext(readFileSync(path, 'utf8'), worker, { filename: path });
 		}
 	};
 
 	runInContext(readFileSync(require.resolve('../public/ai-worker.js'), 'utf8'), worker, {
-		filename: 'ai-worker.js'
+		filename: require.resolve('../public/ai-worker.js')
 	});
 
 
